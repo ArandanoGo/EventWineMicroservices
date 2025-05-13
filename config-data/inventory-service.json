@@ -1,0 +1,5 @@
+﻿{
+  "AppName": "Inventory Service",
+  "Port": 5000,
+  "ConnectionString": "Server=localhost;Database=inventorydb;"
+}

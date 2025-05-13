@@ -69,4 +69,10 @@ public class LotController : ControllerBase
 
         return NoContent();
     }
+    [HttpGet("status")]
+    public IActionResult Status()
+    {
+        return Ok("Inventory Service is alive");
+    }
+
 }

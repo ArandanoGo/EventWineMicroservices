@@ -1,0 +1,5 @@
+﻿{
+  "AppName": "IAM Service",
+  "Port": 5085,
+  "ConnectionString": "Server=localhost;Database=IAMDb;"
+}

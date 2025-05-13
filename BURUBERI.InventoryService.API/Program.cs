@@ -2,6 +2,8 @@ using BURUBERI.InventoryService.API;
 using BURUBERI.InventoryService.API.Data;
 using Microsoft.EntityFrameworkCore;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+using System.Text;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +19,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
         ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))
     )
 );
+
 // ✅ Agrega tus repositorios
 builder.Services.AddScoped<ILotRepository, LotRepository>();
 
@@ -39,7 +42,29 @@ app.MapControllers(); // 👈 esto es CLAVE para activar tus controladores
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    context.Database.EnsureCreated();  // Esto crea la base de datos si no existe
+    context.Database.EnsureCreated();
+}
+
+// ✅ Registro en RegistryService.API (puerto 5002)
+try
+{
+    var serviceInfo = new
+    {
+        name = "inventory-service",
+        url = "http://localhost:5000" // ⚠️ usa el puerto real donde corre InventoryService
+    };
+
+    var json = JsonSerializer.Serialize(serviceInfo);
+    var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+    using var client = new HttpClient();
+    var response = await client.PostAsync("http://localhost:5002/registry/register", content);
+
+    Console.WriteLine($"✅ Registro en RegistryService: {response.StatusCode}");
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"❌ Error registrando el servicio: {ex.Message}");
 }
 
 app.Run();
