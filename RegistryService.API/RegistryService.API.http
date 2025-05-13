@@ -1,0 +1,6 @@
+@RegistryService.API_HostAddress = http://localhost:5002
+
+GET {{RegistryService.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
