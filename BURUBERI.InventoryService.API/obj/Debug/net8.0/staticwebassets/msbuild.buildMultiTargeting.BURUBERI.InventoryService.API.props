@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\BURUBERI.InventoryService.API.props" />
+</Project>
